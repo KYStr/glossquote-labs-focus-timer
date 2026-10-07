@@ -1,0 +1,31 @@
+:root {
+  color-scheme: light;
+  --gq-color-ink: #111410;
+  --gq-color-paper: #f3f0e8;
+  --gq-color-paper-subtle: #e7e4dc;
+  --gq-color-surface: #ffffff;
+  --gq-color-acid: #c8f56a;
+  --gq-color-coral: #ff6846;
+  --gq-color-text: #111410;
+  --gq-color-text-muted: #55594f;
+  --gq-color-separator: #b8bbb2;
+  --gq-color-control-border: #60645c;
+  --gq-color-danger-text: #8f2119;
+  --gq-color-info-text: #254f75;
+  --gq-color-info-surface: #e6f1fa;
+  --gq-font-ui: "Geist", "Segoe UI", system-ui, sans-serif;
+  --gq-font-data: "Geist Mono", "Cascadia Mono", ui-monospace, monospace;
+  --gq-text-xs: 0.75rem;
+  --gq-text-sm: 0.875rem;
+  --gq-text-md: 1rem;
+  --gq-text-lg: 1.25rem;
+  --gq-text-xl: 1.75rem;
+  --gq-space-1: 0.25rem;
+  --gq-space-2: 0.5rem;
+  --gq-space-3: 0.75rem;
+  --gq-space-4: 1rem;
+  --gq-space-6: 1.5rem;
+  --gq-space-8: 2rem;
+  --gq-radius-control: 0.375rem;
+  --gq-border-thin: 1px;
+}

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#f3f0e8">
+    <title>專注計時器｜設定分鐘、暫停與繼續 — GlossQuote-Labs</title>
+    <meta name="description" content="設定 1 至 180 分鐘，開始一段專注計時。可暫停、繼續或取消，在本頁顯示剩餘時間，無需帳號或通知權限。">
+    <meta property="og:title" content="專注計時器 — GlossQuote-Labs">
+    <meta property="og:description" content="在瀏覽器設定 1 至 180 分鐘，自由暫停、繼續或取消。不記錄專注歷史，沒有聲音或通知。">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_TW">
+    <meta property="og:site_name" content="GlossQuote-Labs">
+    <meta name="twitter:card" content="summary">
+    <link rel="alternate" hreflang="en" href="./en/index.html">
+    <link rel="alternate" hreflang="zh-Hant" href="./index.html">
+    <link rel="stylesheet" href="./styles/tokens.css">
+    <link rel="stylesheet" href="./styles/app.css">
+    <script type="module" src="./js/app.mjs"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand brand-link" href="https://glossquote.com/index.html">GlossQuote-Labs</a>
+      <span class="product-name">專注計時</span>
+      <nav class="locale-nav" aria-label="語言">
+        <a href="./en/index.html" lang="en">English</a>
+      </nav>
+    </header>
+    <main class="task-canvas" aria-labelledby="page-title">
+      <div class="page-heading">
+        <h1 id="page-title">專注計時</h1>
+        <p class="intro">選好這次想投入的分鐘數，再開始計時。需要暫停時保留剩餘時間，準備好後接著進行。</p>
+      </div>
+
+      <p id="availability" class="availability">若計時功能未載入，開始按鈕會保持停用；請確認瀏覽器支援 JavaScript。</p>
+
+      <section class="timer-workspace" aria-label="計時控制">
+        <div class="duration-control">
+          <label for="minutes-input">專注分鐘</label>
+          <div class="duration-entry">
+            <input
+              id="minutes-input"
+              name="minutes"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              spellcheck="false"
+              value="25"
+              aria-describedby="minutes-help minutes-error"
+              aria-invalid="false"
+            >
+            <span>分鐘</span>
+          </div>
+          <p id="minutes-help" class="field-help">輸入 1 至 180 的整數分鐘。</p>
+          <p id="minutes-error" class="field-error" hidden>請輸入 1 至 180 的整數分鐘。</p>
+        </div>
+
+        <div class="time-readout">
+          <span id="remaining-label" class="time-label">剩餘時間</span>
+          <p id="remaining-time" class="time-value" aria-labelledby="remaining-label">25:00</p>
+        </div>
+
+        <p id="timer-status" class="timer-status" role="status" aria-live="polite" aria-atomic="true">尚未開始</p>
+
+        <div class="action-row">
+          <button id="start-button" class="primary-action" type="button" disabled>開始計時</button>
+          <button id="cancel-button" class="secondary-action" type="button" hidden>取消計時</button>
+        </div>
+      </section>
+
+      <aside class="usage-note" aria-label="計時限制">
+        <h2>計時方式</h2>
+        <p>本工具依裝置時間計時。分頁在背景或裝置睡眠時，畫面可能延後更新；回到頁面後會校正。調快系統時間可能讓計時提早結束。</p>
+        <p>沒有聲音或系統通知。重新整理或重新載入頁面會清空計時，請在本頁保持操作。</p>
+      </aside>
+      <section class="reading" aria-labelledby="how-title">
+        <h2 id="how-title">開始一段專注時間</h2>
+        <ol>
+          <li>輸入 1 至 180 的整數分鐘，例如閱讀 25 分鐘。</li>
+          <li>按「開始計時」。需要離開時，可暫停並保留剩餘時間。</li>
+          <li>準備好後按「繼續計時」，或按「取消計時」回到原設定。</li>
+        </ol>
+        <p>計時結束後停在 00:00。你可以再次開始，或設定下一段時間。</p>
+      </section>
+      <section class="reading" aria-labelledby="faq-title">
+        <h2 id="faq-title">常見問題</h2>
+        <h3>關閉頁面後會提醒我嗎？</h3>
+        <p>不會。本工具沒有聲音或系統通知。重新整理、切換語言或頁面被重新載入，都會清空計時。</p>
+        <h3>切到其他分頁會停止嗎？</h3>
+        <p>到期時間會保留，背景畫面可能停止更新；回到頁面時，會依裝置時間重新計算剩餘時間。裝置睡眠也可能延後更新；若瀏覽器已丟棄頁面並重新載入，會回到初始 25 分鐘。</p>
+        <h3>時間到了會自動開始休息嗎？</h3>
+        <p>不會。每次只計一段時間，下一段需要你自己開始。</p>
+        <h3>更改電腦時間會怎樣？</h3>
+        <p>偵測到時間往回調整時，計時會暫停；確認後可繼續剩餘時間。往前調整可能讓計時提前結束。</p>
+        <h3>會記錄我的專注時數嗎？</h3>
+        <p>不會。沒有帳號或歷史紀錄，計時狀態只留在這個頁面的記憶體。操作不需要上傳資料；載入網站資源時，託管服務仍會收到一般連線資訊。</p>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <a class="footer-home" href="https://glossquote.com/index.html">GlossQuote-Labs 首頁</a>
+      <nav aria-label="常用工具">
+        <ul class="footer-links">
+          <li><a href="https://units.glossquote.com/index.html">單位換算</a></li>
+          <li><a href="https://date.glossquote.com/index.html">日期計算</a></li>
+        </ul>
+      </nav>
+    </footer>
+  </body>
+</html>

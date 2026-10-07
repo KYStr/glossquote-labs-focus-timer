@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#f3f0e8">
+    <title>Focus timer | Set minutes, pause, and resume — GlossQuote-Labs</title>
+    <meta name="description" content="Set a 1 to 180 minute focus session. Pause, resume, or cancel it in your browser, with no account or notification permission required.">
+    <meta property="og:title" content="Focus timer — GlossQuote-Labs">
+    <meta property="og:description" content="Set 1 to 180 minutes, then pause, resume, or cancel. No focus history, sound, or notifications.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="GlossQuote-Labs">
+    <meta name="twitter:card" content="summary">
+    <link rel="alternate" hreflang="zh-Hant" href="../index.html">
+    <link rel="alternate" hreflang="en" href="./index.html">
+    <link rel="stylesheet" href="../styles/tokens.css">
+    <link rel="stylesheet" href="../styles/app.css">
+    <script type="module" src="../js/app.mjs"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand brand-link" href="https://glossquote.com/en/index.html">GlossQuote-Labs</a>
+      <span class="product-name">Focus timer</span>
+      <nav class="locale-nav" aria-label="Language">
+        <a href="../index.html" lang="zh-Hant">繁體中文</a>
+      </nav>
+    </header>
+    <main class="task-canvas" aria-labelledby="page-title">
+      <div class="page-heading">
+        <h1 id="page-title">Focus timer</h1>
+        <p class="intro">Choose how many minutes you want to focus, then start. Pause whenever you need to keep the remaining time for later.</p>
+      </div>
+
+      <p id="availability" class="availability">If the timer does not load, the start button will stay disabled. Check that your browser supports JavaScript.</p>
+
+      <section class="timer-workspace" aria-label="Timer controls">
+        <div class="duration-control">
+          <label for="minutes-input">Focus duration</label>
+          <div class="duration-entry">
+            <input
+              id="minutes-input"
+              name="minutes"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              spellcheck="false"
+              value="25"
+              aria-describedby="minutes-help minutes-error"
+              aria-invalid="false"
+            >
+            <span>minutes</span>
+          </div>
+          <p id="minutes-help" class="field-help">Enter a whole number from 1 to 180.</p>
+          <p id="minutes-error" class="field-error" hidden>Enter a whole number from 1 to 180 minutes.</p>
+        </div>
+
+        <div class="time-readout">
+          <span id="remaining-label" class="time-label">Time remaining</span>
+          <p id="remaining-time" class="time-value" aria-labelledby="remaining-label">25:00</p>
+        </div>
+
+        <p id="timer-status" class="timer-status" role="status" aria-live="polite" aria-atomic="true">Not started</p>
+
+        <div class="action-row">
+          <button id="start-button" class="primary-action" type="button" disabled>Start timer</button>
+          <button id="cancel-button" class="secondary-action" type="button" hidden>Cancel timer</button>
+        </div>
+      </section>
+
+      <aside class="usage-note" aria-label="Timer limits">
+        <h2>How timing works</h2>
+        <p>The timer uses your device clock. The display may update late while this tab is in the background or your device is asleep; it recalculates when you return. Moving the clock forward can end a session early.</p>
+        <p>There are no sounds or system notifications. Reloading this page or switching languages clears the timer, so keep this page open while you work.</p>
+      </aside>
+      <section class="reading" aria-labelledby="how-title">
+        <h2 id="how-title">Start a focus session</h2>
+        <ol>
+          <li>Enter a whole number from 1 to 180, such as 25 minutes for reading.</li>
+          <li>Select “Start timer.” Pause at any time to keep the remaining time.</li>
+          <li>Select “Resume” when you are ready, or “Cancel timer” to return to the set duration.</li>
+        </ol>
+        <p>When the timer ends, it stays at 00:00. Start again or set a new duration when you are ready.</p>
+      </section>
+      <section class="reading" aria-labelledby="faq-title">
+        <h2 id="faq-title">Frequently asked questions</h2>
+        <h3>Will I get an alert if I close the page?</h3>
+        <p>No. This timer has no sound or system notifications. Reloading the page, switching languages, or reopening a reloaded page clears the timer.</p>
+        <h3>Does it stop when I switch tabs?</h3>
+        <p>The deadline stays in place, but the background display may stop updating. When you return, the timer recalculates the remaining time from your device clock. Sleep can also delay updates. If your browser discards and reloads the page, the timer returns to its initial 25 minutes.</p>
+        <h3>Will it start a break automatically?</h3>
+        <p>No. Each session is one timer. You choose when to start another.</p>
+        <h3>What if I change the device clock?</h3>
+        <p>If the clock moves backward, the timer pauses. Check the clock before resuming the remaining time. Moving it forward can end the timer early.</p>
+        <h3>Does it save my focus history?</h3>
+        <p>No. There is no account or history; timer state stays in this page's memory. The tool does not upload your timer data. The hosting service still receives ordinary connection information when page assets load.</p>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <a class="footer-home" href="https://glossquote.com/en/index.html">GlossQuote-Labs home</a>
+      <nav aria-label="Common tools">
+        <ul class="footer-links">
+          <li><a href="https://units.glossquote.com/en/index.html">Unit converter</a></li>
+          <li><a href="https://date.glossquote.com/en/index.html">Date calculator</a></li>
+        </ul>
+      </nav>
+    </footer>
+  </body>
+</html>

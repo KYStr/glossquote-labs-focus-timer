@@ -65,3 +65,9 @@ F17/F18與F19的BFCache命中、F20完整Network/permissions/storage、讀屏、
 T07 沒有修改純核心與 scheduler。原人工 NOT_RUN 均保留；沒有把靜態掃描、假時鐘、前景計時或 CSS viewport 模擬冒充真背景、睡眠、BFCache、Network／權限／儲存、讀屏、真縮放或真裝置。最終本機必要驗收 PASS（使用者已授權人工例外），實際 hosting 尚未部署。
 
 實際委派：`/root/ft_t00_luna`（T00／T02／T03／T07-A）與 `/root/ft_release_luna`（T07-B），均以工具明確要求 `gpt-6-luna`、`max` 並接受。主代理保留架構、研究、邊界驗證、整合、瀏覽器與發布責任；沒有再次委派。模型底層實際路由無獨立證據，標為未確認；不以代理自述核實。
+
+## 2026-10-09 real release verification
+
+The primary deployed the reviewed production assets to focus.glossquote.com using the user-designated credential file, under the explicit narrow authorization recorded in the repository contract. No credential content was printed or published. Worker version: 63fef14e-9d29-4ed9-8d49-598e23bfef0e. All 32 real HTTPS checks passed: GET/HEAD, exact bytes of 11 public assets, bilingual canonical/hreflang/indexability, robots/sitemap, MIME/security headers, root/language redirects and 404 paths. The live homepage was updated only after the tool passed these checks; both catalog pages list the tool with its actual 2026-10-09 first release date and matching-language URLs.
+
+Primary live IAB verification: a real one-minute Chinese session reached 00:00 and the completed message; switching to English reset to 25:00; a two-minute English session started, paused showing 01:58, resumed and was cancelled. The English home link reached the verified English catalog. This is an actual browser smoke check, not background/sleep/BFCache certification. Existing NOT_RUN items and the previously passed 59 offline tests remain recorded above. No functional source changed in this deployment.

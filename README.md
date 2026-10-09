@@ -19,7 +19,7 @@
 
 計時器不提供通知、聲音、震動、自動休息或跨分頁同步。重新整理會清除目前計時；背景分頁與裝置睡眠可能延遲畫面更新，系統時間變動也會影響倒數。
 
-正式產物與 Cloudflare 設定已備妥，目前尚未部署；不要把正式 SEO 產物當成上線證明。瀏覽器人工驗收中明列的 `NOT_RUN` 項目（包括真實睡眠、確認 BFCache 命中、完整 Network／permissions／storage、讀屏、200% 縮放、reduced-motion 與其他裝置）仍待實測，詳見 `docs/VERIFICATION.md`。
+2026-10-09 已正式上線：[繁體中文](https://focus.glossquote.com/index.html) · [English](https://focus.glossquote.com/en/index.html)。32 項正式 HTTPS 檢查通過，11 個公開資產與審查過的建置逐位元組相同；双語首頁已列出本工具。瀏覽器人工驗收中明列的 `NOT_RUN` 項目（包括真實睡眠、確認 BFCache 命中、完整 Network／permissions／storage、讀屏、200% 縮放、reduced-motion 與其他裝置）仍待實測，搜尋引擎收錄亦未確認，詳見 `docs/VERIFICATION.md`。
 
 ## English
 
@@ -27,4 +27,4 @@ The focus timer runs one session at a time. Set 1–180 minutes, then start, pau
 
 Use `npm.cmd run dev`, `npm.cmd test`, `npm.cmd run check`, and `npm.cmd run build` for local work. Preview builds remain `noindex, nofollow`. Prepare production files with the explicit `--production --cloudflare --site-url https://focus.glossquote.com/` flags, then run the same flags with `scripts/check.mjs` to verify the output.
 
-Development requires Node.js 24+. The project has no package dependencies and does not need `npm install`. There are no notifications, sounds, vibration, automatic breaks, or cross-tab sync. Reloading clears the session. Background tabs and device sleep can delay screen updates, and system clock changes affect the countdown. Hosting has not been deployed. Manual checks marked `NOT_RUN` remain pending in `docs/VERIFICATION.md`.
+Development requires Node.js 24+. The project has no package dependencies and does not need `npm install`. There are no notifications, sounds, vibration, automatic breaks, or cross-tab sync. Reloading clears the session. Background tabs and device sleep can delay screen updates, and system clock changes affect the countdown. Live hosting was verified on 2026-10-09: 32 HTTPS checks passed and all 11 public assets match the reviewed build. Both language versions are listed on the GlossQuote homepage. Manual checks marked `NOT_RUN` remain pending in `docs/VERIFICATION.md`; search-engine indexing is unverified.

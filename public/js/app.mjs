@@ -58,7 +58,7 @@ function render() {
   const editable = state.phase === "ready" || state.phase === "completed";
   const duration = editable ? parseDuration(minutesInput.value) : { ok: true, value: state.minutes };
   const invalidDuration = editable && !duration.ok;
-  const formattedTime = formatRemaining(state.remainingMs);
+  const formattedTime = invalidDuration ? "—:—" : formatRemaining(state.remainingMs);
   const statusText = statusOverride ?? describeState(state);
 
   minutesInput.disabled = !editable;

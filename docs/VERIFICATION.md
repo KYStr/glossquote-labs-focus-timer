@@ -71,3 +71,18 @@ T07 沒有修改純核心與 scheduler。原人工 NOT_RUN 均保留；沒有把
 The primary deployed the reviewed production assets to focus.glossquote.com using the user-designated credential file, under the explicit narrow authorization recorded in the repository contract. No credential content was printed or published. Worker version: 63fef14e-9d29-4ed9-8d49-598e23bfef0e. All 32 real HTTPS checks passed: GET/HEAD, exact bytes of 11 public assets, bilingual canonical/hreflang/indexability, robots/sitemap, MIME/security headers, root/language redirects and 404 paths. The live homepage was updated only after the tool passed these checks; both catalog pages list the tool with its actual 2026-10-09 first release date and matching-language URLs.
 
 Primary live IAB verification: a real one-minute Chinese session reached 00:00 and the completed message; switching to English reset to 25:00; a two-minute English session started, paused showing 01:58, resumed and was cancelled. The English home link reached the verified English catalog. This is an actual browser smoke check, not background/sleep/BFCache certification. Existing NOT_RUN items and the previously passed 59 offline tests remain recorded above. No functional source changed in this deployment.
+
+## 2026-10-09 external-audit UI clarification
+
+The focus readout now shows `—:—` while the editable minutes field contains an invalid value. The existing validation error and disabled Start button remain active. This is a display-only state: the timer's last valid `remainingMs`, deadline, scheduler, and core algorithm are unchanged; entering a valid value updates the preview through the existing `SET_DURATION` path.
+
+The visible usage note in both languages now states that reloading, leaving the page, or switching languages clears the timer. The device-clock and background/sleep update caveat remains in the note.
+
+Automated acceptance run from `tool-projects/07-focus-timer`:
+
+- `npm.cmd test`: exit 0, 59/59 tests passed.
+- `npm.cmd run check`: exit 0, 9 public assets and 13 Node source files checked.
+
+This change has no DOM test harness; no static test was added that merely mirrors the new copy or rendering expression. The delegated work did not run a browser or production build. Primary browser verification remains pending for invalid `181` → `—:—`, valid `180` → `180:00`, and the reset notice in both language pages. Live deploy/source publication and the broader M12 gates are owned by the primary.
+
+Primary local verification (2026-10-09): reviewed all three product diffs against the previous published source; independently ran `node --test` (59/59) and production Cloudflare build (13 files, including production-output validation). Real IAB at loopback preview: zh invalid `181`, `0`, `-1`, `1.5`, empty all show `—:—`, visible error and disabled Start; valid `180` restores `180:00`, clears error and enables Start. English `181`/`180` passed the same checks. English start → pause → resume → cancel returned `180:00`/Timer cancelled. Language navigation reset to `25:00`; both visible reset notices verified. These are actual browser interactions, not simulated DOM tests. Existing manual NOT_RUN exceptions remain.

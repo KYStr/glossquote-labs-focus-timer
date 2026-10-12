@@ -125,8 +125,11 @@ export function createChime({ createContext, setTimeoutFn, clearTimeoutFn, onSta
     });
   }
 
-  function setEnabledFromGesture(value) {
+  function setEnabledFromGesture(value, timerRunning = running) {
     enabled = value === true;
+    // Lifecycle cleanup can stop audio while the timer still runs. Only a
+    // new gesture may re-arm it, using the caller's reconciled timer state.
+    running = timerRunning === true && !reminded;
     if (!enabled) {
       closeContext();
       onStatus("off");
@@ -161,10 +164,11 @@ export function createChime({ createContext, setTimeoutFn, clearTimeoutFn, onSta
   }
 
   function complete() {
-    if (!running || reminded) return false;
+    if (reminded) return false;
+    const wasRunning = running;
     running = false;
     reminded = true;
-    if (enabled && !pending && playTone(false)) return true;
+    if (wasRunning && enabled && !pending && playTone(false)) return true;
     closeContext();
     onStatus(enabled ? "unready" : "off");
     return false;

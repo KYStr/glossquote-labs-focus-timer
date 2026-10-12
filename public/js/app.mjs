@@ -144,6 +144,18 @@ function handleVisibilityChange() {
   scheduler.reconcile();
 }
 
+function handleSoundOptionChange() {
+  if (!soundOption.checked) {
+    // Stop sound first, including when the deadline has just elapsed.
+    void chime.setEnabledFromGesture(false, state.phase === "running");
+    scheduler.reconcile();
+    return;
+  }
+  // Reconcile before re-arming: an expired session must not get a late chime.
+  scheduler.reconcile();
+  void chime.setEnabledFromGesture(true, state.phase === "running");
+}
+
 function handlePageShow() {
   scheduler.reconcile();
 }
@@ -177,7 +189,7 @@ try {
   document.addEventListener("visibilitychange", handleVisibilityChange, { signal: controller.signal });
   window.addEventListener("pageshow", handlePageShow, { signal: controller.signal });
   window.addEventListener("pagehide", handlePageHide, { signal: controller.signal });
-  soundOption.addEventListener("change", () => { void chime.setEnabledFromGesture(soundOption.checked); }, { signal: controller.signal });
+  soundOption.addEventListener("change", handleSoundOptionChange, { signal: controller.signal });
   soundTest.addEventListener("click", () => { void chime.testFromGesture(); }, { signal: controller.signal });
 
   available = true;

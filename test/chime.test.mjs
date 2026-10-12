@@ -4,6 +4,20 @@ import { createChime, CHIME_LIMITS } from "../public/js/chime.mjs";
 import { createTimer, transition } from "../public/js/core/timer.mjs";
 import { createScheduler } from "../public/js/scheduler.mjs";
 
+function timerBridge(sound) {
+  let state = createTimer(1), now = 1000;
+  const dispatch = (event, timestamp) => {
+    const result = transition(state, event, timestamp);
+    state = result.state;
+    if (result.completedNow) sound.complete();
+    return result;
+  };
+  const scheduler = createScheduler({ getState: () => state, dispatch, now: () => now,
+    isVisible: () => true, setTimeoutFn: () => 1, clearTimeoutFn() {},
+  });
+  return { dispatch, scheduler, state: () => state, at: (value) => { now = value; } };
+}
+
 const flush = async () => { for (let i = 0; i < 6; i += 1) await Promise.resolve(); };
 
 function fixture({ resume = "ok", closeFails = false, nodeFails = false } = {}) {
@@ -210,4 +224,80 @@ test("actual timer and scheduler completion flags suppress repeated/background/c
   now = 140_000; stale(); await flush();
   assert.equal(state.phase, "ready"); assert.equal(last.oscillators.length, 0); assert.equal(last.closes, 1);
   assert.equal(f.timers.size, 0);
+});
+
+test("pagehide then unexpired reconciliation and explicit off/on re-arms the current session once", async () => {
+  const f = fixture(), timer = timerBridge(f.sound);
+  await f.sound.setEnabledFromGesture(true, false); await flush();
+  timer.dispatch({ type: "START" }, 1000); await f.sound.startFromGesture();
+  f.sound.pageHide(); timer.scheduler.stop(); await flush();
+  const beforeReturn = f.contexts.length;
+  timer.at(11000); timer.scheduler.reconcile();
+  assert.equal(timer.state().phase, "running");
+  assert.equal(timer.state().remainingMs, 50000);
+  assert.equal(f.contexts.length, beforeReturn, "pageshow must not initialize audio");
+  assert.equal(f.status.at(-1), "stopped");
+  await f.sound.setEnabledFromGesture(false, timer.state().phase === "running"); await flush();
+  await f.sound.setEnabledFromGesture(true, timer.state().phase === "running"); await flush();
+  assert.equal(f.sound.inspect().context, true, "explicit re-enable must retain the running session context");
+  assert.equal(f.sound.inspect().running, true);
+  timer.at(61000); timer.scheduler.reconcile(); timer.scheduler.reconcile();
+  assert.equal(timer.state().phase, "completed");
+  assert.equal(f.contexts.at(-1).oscillators.length, 1);
+  assert.equal(f.status.at(-1), "attempted");
+  assert.equal(f.sound.complete(), false);
+  f.end(); await flush(); assert.equal(f.timers.size, 0);
+});
+
+test("pagehide completion without a new gesture reports unready, allocates nothing and never replays", async () => {
+  const f = fixture(), timer = timerBridge(f.sound);
+  await f.sound.setEnabledFromGesture(true, false); await flush();
+  timer.dispatch({ type: "START" }, 1000); await f.sound.startFromGesture();
+  f.sound.pageHide(); timer.scheduler.stop(); await flush();
+  const count = f.contexts.length;
+  timer.at(11000); timer.scheduler.reconcile();
+  assert.equal(f.status.at(-1), "stopped");
+  assert.equal(f.contexts.length, count);
+  timer.at(70000); timer.scheduler.reconcile();
+  assert.equal(timer.state().phase, "completed");
+  assert.equal(f.status.at(-1), "unready");
+  assert.equal(f.sound.inspect().reminded, true);
+  timer.scheduler.reconcile(); assert.equal(f.sound.complete(), false);
+  assert.equal(f.contexts.length, count);
+  assert.ok(f.contexts.every(c => c.oscillators.length === 0));
+  assert.equal(f.timers.size, 0);
+});
+
+test("off/on after expiry probes only, does not replay or reset the completed session", async () => {
+  const f = fixture(), timer = timerBridge(f.sound);
+  await f.sound.setEnabledFromGesture(true, false); await flush();
+  timer.dispatch({ type: "START" }, 1000); await f.sound.startFromGesture();
+  f.sound.pageHide(); await flush();
+  timer.at(70000); timer.scheduler.reconcile();
+  await f.sound.setEnabledFromGesture(false, timer.state().phase === "running"); await flush();
+  await f.sound.setEnabledFromGesture(true, timer.state().phase === "running"); await flush();
+  assert.equal(f.sound.inspect().context, false);
+  assert.equal(f.sound.inspect().reminded, true);
+  assert.equal(f.sound.complete(), false);
+  assert.ok(f.contexts.every(c => c.oscillators.length === 0));
+  timer.dispatch({ type: "START" }, 80000); await f.sound.startFromGesture();
+  timer.at(140000); timer.scheduler.reconcile();
+  assert.equal(f.contexts.at(-1).oscillators.length, 1);
+  timer.scheduler.reconcile(); assert.equal(f.sound.complete(), false);
+  f.end(); await flush(); assert.equal(f.timers.size, 0);
+});
+
+test("enable reconciles an elapsed but unsampled deadline before arming audio", async () => {
+  const f = fixture(), timer = timerBridge(f.sound);
+  timer.dispatch({ type: "START" }, 1000); await f.sound.startFromGesture();
+  timer.at(70000);
+  assert.equal(timer.state().phase, "running", "no tick has sampled the elapsed deadline yet");
+  // Same order as the app's enable handler: reconcile, then pass current phase.
+  timer.scheduler.reconcile();
+  await f.sound.setEnabledFromGesture(true, timer.state().phase === "running"); await flush();
+  assert.equal(timer.state().phase, "completed");
+  assert.equal(f.sound.inspect().reminded, true);
+  assert.equal(f.sound.inspect().context, false);
+  assert.equal(f.sound.complete(), false);
+  assert.ok(f.contexts.every(c => c.oscillators.length === 0));
 });

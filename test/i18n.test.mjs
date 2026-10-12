@@ -5,7 +5,7 @@ import { getMessages, MESSAGES } from "../public/js/i18n.mjs";
 test("supported locales expose the same complete, nonempty message keys", () => {
   assert.deepEqual(Object.keys(MESSAGES).sort(), ["en", "zh-Hant"]);
   assert.deepEqual(Object.keys(MESSAGES.en).sort(), Object.keys(MESSAGES["zh-Hant"]).sort());
-  assert.deepEqual(Object.keys(MESSAGES.en).sort(), ["stateRunning", "stateClockBackward", "statePaused", "stateCompleted", "stateError", "stateReady", "buttonPause", "buttonResume", "buttonRestart", "buttonStart", "buttonCancel", "durationError", "statusCancelled", "unavailable", "titleRunning", "titleCompleted"].sort());
+  assert.deepEqual(Object.keys(MESSAGES.en).sort(), ["stateRunning", "stateClockBackward", "statePaused", "stateCompleted", "stateError", "stateReady", "buttonPause", "buttonResume", "buttonRestart", "buttonStart", "buttonCancel", "durationError", "statusCancelled", "unavailable", "titleRunning", "titleCompleted", "sound_off", "sound_enabled", "sound_preparing", "sound_test", "sound_attempted", "sound_unsupported", "sound_blocked", "sound_cleanup", "sound_stopped", "sound_unready"].sort());
   for (const localeMessages of Object.values(MESSAGES)) {
     for (const value of Object.values(localeMessages)) {
       assert.equal(typeof value, "string");

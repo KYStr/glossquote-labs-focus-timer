@@ -451,7 +451,9 @@ function assertNodeJavaScriptReferences(source, relativePath, nodeFiles) {
 function assertSafeJavaScript(source, relativePath, files) {
   const { tokens, specifiers } = findModuleSpecifiers(source);
   for (const identifier of tokens.filter((token) => token.type === "identifier").map((token) => token.value)) {
-    if (BANNED_IDENTIFIERS.has(identifier)) {
+    const authorizedChime = relativePath === "js/chime.mjs" &&
+      (identifier === "AudioContext" || identifier === "webkitAudioContext");
+    if (BANNED_IDENTIFIERS.has(identifier) && !authorizedChime) {
       throw new Error(`Disallowed browser capability in ${relativePath}: ${identifier}`);
     }
   }

@@ -235,6 +235,43 @@ h1 {
   display: none;
 }
 
+.sound-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gq-space-3);
+  margin-top: var(--gq-space-6);
+}
+
+.sound-choice {
+  display: flex;
+  flex: 1 1 18rem;
+  align-items: center;
+  gap: var(--gq-space-3);
+  min-height: 2.75rem;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.sound-choice input {
+  flex: 0 0 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--gq-color-ink);
+}
+
+.sound-test { flex: 0 0 auto; }
+
+.sound-help,
+.sound-status {
+  margin: var(--gq-space-2) 0 0;
+  color: var(--gq-color-text-muted);
+  font-size: var(--gq-text-sm);
+}
+
+.sound-status { min-height: 1.6em; }
+
 .usage-note {
   max-width: 42rem;
   margin-top: var(--gq-space-8);

@@ -17,7 +17,9 @@
 
 ## 使用限制與發布狀態
 
-計時器不提供通知、聲音、震動、自動休息或跨分頁同步。重新整理會清除目前計時；背景分頁與裝置睡眠可能延遲畫面更新，系統時間變動也會影響倒數。
+計時器預設無聲。可明確開啟「到期播放提示音」，或按「試聽」播放本機 0.6 秒短音；不載入外部音檔、不保存選項。每段到期只嘗試一次，取消、暫停、關閉選項或離開頁面會停止並清理音訊。沒有系統通知、震動、自動休息或跨分頁同步；靜音、瀏覽器限制、背景與睡眠仍可能延遲或無聲，請以畫面為準。
+
+U07-OPT-IN-CHIME-20261013 是本次來源候選升級，尚待主代理 review／正式部署與新版外部驗收；以下 2026-10-09 hosting 紀錄是此前版本，不代表提示音升級已上線。
 
 2026-10-09 已正式上線：[繁體中文](https://focus.glossquote.com/index.html) · [English](https://focus.glossquote.com/en/index.html)。32 項正式 HTTPS 檢查通過，11 個公開資產與審查過的建置逐位元組相同；双語首頁已列出本工具。瀏覽器人工驗收中明列的 `NOT_RUN` 項目（包括真實睡眠、確認 BFCache 命中、完整 Network／permissions／storage、讀屏、200% 縮放、reduced-motion 與其他裝置）仍待實測，搜尋引擎收錄亦未確認，詳見 `docs/VERIFICATION.md`。
 
@@ -27,4 +29,4 @@ The focus timer runs one session at a time. Set 1–180 minutes, then start, pau
 
 Use `npm.cmd run dev`, `npm.cmd test`, `npm.cmd run check`, and `npm.cmd run build` for local work. Preview builds remain `noindex, nofollow`. Prepare production files with the explicit `--production --cloudflare --site-url https://focus.glossquote.com/` flags, then run the same flags with `scripts/check.mjs` to verify the output.
 
-Development requires Node.js 24+. The project has no package dependencies and does not need `npm install`. There are no notifications, sounds, vibration, automatic breaks, or cross-tab sync. Reloading clears the session. Background tabs and device sleep can delay screen updates, and system clock changes affect the countdown. Live hosting was verified on 2026-10-09: 32 HTTPS checks passed and all 11 public assets match the reviewed build. Both language versions are listed on the GlossQuote homepage. Manual checks marked `NOT_RUN` remain pending in `docs/VERIFICATION.md`; search-engine indexing is unverified.
+Development requires Node.js 24+. There are no package dependencies or `npm install` step. Sound is off by default; opt in to a short 0.6-second local chime or use Test sound without enabling it. No external audio files or saved preference. Mute, browser policy, background throttling, and sleep may delay or silence it; check the screen. There are no system notifications, vibration, automatic breaks, or cross-tab sync. Reloading and changing languages reset the session and sound option. The U07 source upgrade awaits primary review, live deployment, and a new external review. The 2026-10-09 verified hosting refers to the earlier release. Manual `NOT_RUN` items and indexing remain unverified.

@@ -2,6 +2,7 @@ import { createTimer, parseDuration, transition } from "./core/timer.mjs";
 import { formatRemaining } from "./core/format.mjs";
 import { createScheduler } from "./scheduler.mjs";
 import { getMessages } from "./i18n.mjs";
+import { createBrowserChime } from "./chime.mjs";
 
 const messages = getMessages(document.documentElement.lang);
 const INITIAL_TITLE = document.title;
@@ -12,12 +13,16 @@ const minutesError = document.getElementById("minutes-error");
 const remainingTime = document.getElementById("remaining-time");
 const timerStatus = document.getElementById("timer-status");
 const availability = document.getElementById("availability");
+const soundOption = document.getElementById("sound-option");
+const soundTest = document.getElementById("sound-test");
+const soundStatus = document.getElementById("sound-status");
 
 let state = null;
 let scheduler = null;
 let controller = null;
 let available = false;
 let statusOverride = null;
+let chime = null;
 
 function assertBrowserApis() {
   if (
@@ -28,6 +33,7 @@ function assertBrowserApis() {
     !remainingTime ||
     !timerStatus ||
     !availability ||
+    !soundOption || !soundTest || !soundStatus ||
     typeof Date.now !== "function" ||
     typeof window.setTimeout !== "function" ||
     typeof window.clearTimeout !== "function" ||
@@ -93,6 +99,10 @@ function dispatch(event, timestamp) {
   state = result.state;
   if (event.type === "CANCEL") statusOverride = messages.statusCancelled;
   else if (result.state.phase !== previousPhase) statusOverride = null;
+  if (event.type === "CANCEL") chime.cancel();
+  else if (state.phase === "error") chime.fail();
+  else if (state.phase === "paused" && previousPhase === "running") chime.pause();
+  if (result.completedNow) chime.complete();
   render();
   return result;
 }
@@ -110,10 +120,12 @@ function handlePrimaryAction() {
   }
   if (state.phase === "paused") {
     applyUserEvent({ type: "RESUME" }, Date.now());
+    if (state.phase === "running") void chime.resumeFromGesture();
     return;
   }
   if (state.phase === "ready" || state.phase === "completed") {
     applyUserEvent({ type: "START" }, Date.now());
+    if (state.phase === "running") void chime.startFromGesture();
   }
 }
 
@@ -138,12 +150,17 @@ function handlePageShow() {
 
 function handlePageHide(event) {
   scheduler.stop();
+  chime.pageHide();
   if (!event.persisted) controller.abort();
 }
 
 try {
   assertBrowserApis();
   state = createTimer(25);
+  soundOption.checked = false;
+  chime = createBrowserChime(window, (code) => {
+    soundStatus.textContent = messages[`sound_${code}`];
+  });
   controller = new window.AbortController();
   scheduler = createScheduler({
     getState: () => state,
@@ -160,15 +177,22 @@ try {
   document.addEventListener("visibilitychange", handleVisibilityChange, { signal: controller.signal });
   window.addEventListener("pageshow", handlePageShow, { signal: controller.signal });
   window.addEventListener("pagehide", handlePageHide, { signal: controller.signal });
+  soundOption.addEventListener("change", () => { void chime.setEnabledFromGesture(soundOption.checked); }, { signal: controller.signal });
+  soundTest.addEventListener("click", () => { void chime.testFromGesture(); }, { signal: controller.signal });
 
   available = true;
+  soundOption.disabled = false;
+  soundTest.disabled = false;
   availability.hidden = true;
   scheduler.sync();
   render();
 } catch {
   scheduler?.stop();
+  chime?.cancel();
   controller?.abort();
   startButton?.setAttribute("disabled", "");
+  soundOption?.setAttribute("disabled", "");
+  soundTest?.setAttribute("disabled", "");
   if (availability) {
     availability.hidden = false;
     availability.textContent = messages.unavailable;

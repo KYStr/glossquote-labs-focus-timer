@@ -6,9 +6,9 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="theme-color" content="#f3f0e8">
     <title>Focus timer | Set minutes, pause, and resume — GlossQuote-Labs</title>
-    <meta name="description" content="Set a 1 to 180 minute focus session. Pause, resume, or cancel it in your browser, with no account or notification permission required.">
+    <meta name="description" content="Set a 1 to 180 minute focus session. Pause, resume, or cancel. Sound is off by default, with an optional short local chime and no notification permission.">
     <meta property="og:title" content="Focus timer — GlossQuote-Labs">
-    <meta property="og:description" content="Set 1 to 180 minutes, then pause, resume, or cancel. No focus history, sound, or notifications.">
+    <meta property="og:description" content="Set 1 to 180 minutes, then pause, resume, or cancel. Optional short local chime, off by default. No focus history or system notifications.">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
     <meta property="og:site_name" content="GlossQuote-Labs">
@@ -67,12 +67,21 @@
           <button id="start-button" class="primary-action" type="button" disabled>Start timer</button>
           <button id="cancel-button" class="secondary-action" type="button" hidden>Cancel timer</button>
         </div>
+        <div class="sound-controls">
+          <label class="sound-choice" for="sound-option">
+            <input id="sound-option" type="checkbox" autocomplete="off" aria-describedby="sound-help sound-status" disabled>
+            <span>Play a sound when time is up</span>
+          </label>
+          <button id="sound-test" class="secondary-action sound-test" type="button" disabled>Test sound</button>
+        </div>
+        <p id="sound-help" class="sound-help">Off by default. A short sound plays locally. Device mute, background tabs, or sleep can delay or silence it; check the timer on screen.</p>
+        <p id="sound-status" class="sound-status" role="status" aria-live="polite" aria-atomic="true">Sound is off. Testing it does not turn on the end-of-session sound.</p>
       </section>
 
       <aside class="usage-note" aria-label="Timer limits">
         <h2>How timing works</h2>
         <p>The timer uses your device clock. The display may update late while this tab is in the background or your device is asleep; it recalculates when you return. Moving the clock forward can end a session early.</p>
-        <p>There are no sounds or system notifications. Reloading, leaving this page, or switching languages clears the timer, so keep this page open while you work.</p>
+        <p>Sound is off by default and must be enabled by you. There are no system notifications. Reloading, leaving this page, or switching languages clears the timer and sound option, so keep this page open while you work.</p>
       </aside>
       <section class="reading" aria-labelledby="how-title">
         <h2 id="how-title">Start a focus session</h2>
@@ -86,7 +95,9 @@
       <section class="reading" aria-labelledby="faq-title">
         <h2 id="faq-title">Frequently asked questions</h2>
         <h3>Will I get an alert if I close the page?</h3>
-        <p>No. This timer has no sound or system notifications. Reloading the page, switching languages, or reopening a reloaded page clears the timer.</p>
+        <p>No. The optional chime only works in this page. It is not a reliable alarm and does not send system notifications. Reloading, switching languages, or reopening a reloaded page clears the timer and sound option.</p>
+        <h3>How do I enable the end-of-session sound?</h3>
+        <p>Select “Play a sound when time is up” and use “Test sound” to check your device settings. Each session attempts one short chime when it ends; testing does not select the option. Device mute, browser restrictions, background throttling, or sleep may still delay or silence it. Check the timer on screen too.</p>
         <h3>Does it stop when I switch tabs?</h3>
         <p>The deadline stays in place, but the background display may stop updating. When you return, the timer recalculates the remaining time from your device clock. Sleep can also delay updates. If your browser discards and reloads the page, the timer returns to its initial 25 minutes.</p>
         <h3>Will it start a break automatically?</h3>

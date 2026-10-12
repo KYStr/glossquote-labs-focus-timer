@@ -218,6 +218,15 @@ test("project check validates actual syntax, local imports, and forbidden APIs",
     assert.equal((await runProjectCheck({ projectPath: projectRoot })).fileCount, 6);
     const originalHtml = await readFile(resolve(projectRoot, "public/index.html"), "utf8");
 
+    await writeFile(resolve(projectRoot, "public/js/app.mjs"), "export const context = AudioContext;\n", "utf8");
+    await assert.rejects(runProjectCheck({ projectPath: projectRoot }), /Disallowed browser capability/);
+    await writeFile(resolve(projectRoot, "public/js/app.mjs"), "export {};\n", "utf8");
+    await writeFile(resolve(projectRoot, "public/js/chime.mjs"), "export const context = AudioContext;\n", "utf8");
+    await runProjectCheck({ projectPath: projectRoot });
+    await writeFile(resolve(projectRoot, "public/js/chime.mjs"), "export const request = fetch;\n", "utf8");
+    await assert.rejects(runProjectCheck({ projectPath: projectRoot }), /Disallowed browser capability/);
+    await rm(resolve(projectRoot, "public/js/chime.mjs"));
+
     await writeFile(resolve(projectRoot, "public/js/app.mjs"), "export const = 1;", "utf8");
     await assert.rejects(runProjectCheck({ projectPath: projectRoot }), /JavaScript syntax check failed/);
 

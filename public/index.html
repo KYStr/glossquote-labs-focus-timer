@@ -6,9 +6,9 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="theme-color" content="#f3f0e8">
     <title>專注計時器｜設定分鐘、暫停與繼續 — GlossQuote-Labs</title>
-    <meta name="description" content="設定 1 至 180 分鐘，開始一段專注計時。可暫停、繼續或取消，在本頁顯示剩餘時間，無需帳號或通知權限。">
+    <meta name="description" content="設定 1 至 180 分鐘，暫停、繼續或取消專注計時。預設無聲，可自行開啟本機短提示音；無需帳號或通知權限。">
     <meta property="og:title" content="專注計時器 — GlossQuote-Labs">
-    <meta property="og:description" content="在瀏覽器設定 1 至 180 分鐘，自由暫停、繼續或取消。不記錄專注歷史，沒有聲音或通知。">
+    <meta property="og:description" content="在瀏覽器設定 1 至 180 分鐘，自由暫停、繼續或取消。預設無聲，可選本機短提示音；不記錄歷史或要求通知權限。">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="zh_TW">
     <meta property="og:site_name" content="GlossQuote-Labs">
@@ -67,12 +67,21 @@
           <button id="start-button" class="primary-action" type="button" disabled>開始計時</button>
           <button id="cancel-button" class="secondary-action" type="button" hidden>取消計時</button>
         </div>
+        <div class="sound-controls">
+          <label class="sound-choice" for="sound-option">
+            <input id="sound-option" type="checkbox" autocomplete="off" aria-describedby="sound-help sound-status" disabled>
+            <span>到期播放提示音</span>
+          </label>
+          <button id="sound-test" class="secondary-action sound-test" type="button" disabled>試聽</button>
+        </div>
+        <p id="sound-help" class="sound-help">預設關閉，只在本機播放短提示音。裝置靜音、背景或睡眠可能讓提示音延遲或無聲；請以畫面為準。</p>
+        <p id="sound-status" class="sound-status" role="status" aria-live="polite" aria-atomic="true">提示音關閉。你可以先試聽，不會自動開啟到期提醒。</p>
       </section>
 
       <aside class="usage-note" aria-label="計時限制">
         <h2>計時方式</h2>
         <p>本工具依裝置時間計時。分頁在背景或裝置睡眠時，畫面可能延後更新；回到頁面後會校正。調快系統時間可能讓計時提早結束。</p>
-        <p>沒有聲音或系統通知。重新整理、離開本頁或切換語言都會清空計時，請在本頁保持操作。</p>
+        <p>預設無聲，提示音需自行開啟；不提供系統通知。重新整理、離開本頁或切換語言會清空計時，提示音選項也不保存，請在本頁保持操作。</p>
       </aside>
       <section class="reading" aria-labelledby="how-title">
         <h2 id="how-title">開始一段專注時間</h2>
@@ -86,7 +95,9 @@
       <section class="reading" aria-labelledby="faq-title">
         <h2 id="faq-title">常見問題</h2>
         <h3>關閉頁面後會提醒我嗎？</h3>
-        <p>不會。本工具沒有聲音或系統通知。重新整理、切換語言或頁面被重新載入，都會清空計時。</p>
+        <p>不會。可選提示音只在本頁運作，不是可靠鬧鐘，也不會發出系統通知。重新整理、切換語言或頁面被重新載入，都會清空計時及提示音選項。</p>
+        <h3>如何開啟到期提示音？</h3>
+        <p>勾選「到期播放提示音」，可先按「試聽」確認裝置設定。每段到期只嘗試播放一次短提示音；試聽不會自動勾選。裝置靜音、瀏覽器限制、背景節流或睡眠仍可能讓提示音延遲或無聲，請同時查看畫面。</p>
         <h3>切到其他分頁會停止嗎？</h3>
         <p>到期時間會保留，背景畫面可能停止更新；回到頁面時，會依裝置時間重新計算剩餘時間。裝置睡眠也可能延後更新；若瀏覽器已丟棄頁面並重新載入，會回到初始 25 分鐘。</p>
         <h3>時間到了會自動開始休息嗎？</h3>

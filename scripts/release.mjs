@@ -37,6 +37,7 @@ export function releasePolicy(siteUrl) {
       `<link rel="canonical" href="${urls[pageIndex]}">`,
       `<link rel="alternate" hreflang="zh-Hant" href="${urls[0]}">`,
       `<link rel="alternate" hreflang="en" href="${urls[1]}">`,
+      `<link rel="alternate" hreflang="x-default" href="${urls[0]}">`,
     ];
   };
   const files = new Map([

@@ -23,12 +23,13 @@ const pages = [
     title: "專注計時器｜設定分鐘、暫停與繼續 — GlossQuote-Labs",
     faqHeadings: [
       "關閉頁面後會提醒我嗎？",
+      "如何開啟到期提示音？",
       "切到其他分頁會停止嗎？",
       "時間到了會自動開始休息嗎？",
       "更改電腦時間會怎樣？",
       "會記錄我的專注時數嗎？",
     ],
-    limits: ["沒有聲音或系統通知", "裝置睡眠也可能延後更新", "往前調整可能讓計時提前結束", "切換語言", "託管服務仍會收到一般連線資訊"],
+    limits: ["預設無聲", "不提供系統通知", "裝置睡眠也可能延後更新", "往前調整可能讓計時提前結束", "切換語言", "託管服務仍會收到一般連線資訊"],
   },
   {
     name: "English",
@@ -47,12 +48,13 @@ const pages = [
     title: "Focus timer | Set minutes, pause, and resume — GlossQuote-Labs",
     faqHeadings: [
       "Will I get an alert if I close the page?",
+      "How do I enable the end-of-session sound?",
       "Does it stop when I switch tabs?",
       "Will it start a break automatically?",
       "What if I change the device clock?",
       "Does it save my focus history?",
     ],
-    limits: ["no sound or system notifications", "Sleep can also delay updates", "Moving it forward can end the timer early", "switching languages", "hosting service still receives ordinary connection information"],
+    limits: ["Sound is off by default", "no system notifications", "Sleep can also delay updates", "Moving it forward can end the timer early", "switching languages", "hosting service still receives ordinary connection information"],
   },
 ];
 
@@ -98,7 +100,12 @@ for (const page of pages) {
     assert.match(html, /id="availability"[^>]*>[^<]+<\/p>/);
 
     for (const heading of page.faqHeadings) assert.ok(html.includes(`<h3>${heading}</h3>`), `missing FAQ: ${heading}`);
-    assert.equal([...html.matchAll(/<h3>/g)].length, 5, "the page should contain five FAQ entries");
+    assert.equal([...html.matchAll(/<h3>/g)].length, 6, "the page should contain six FAQ entries");
+    const soundOption = html.match(/<input\b[^>]*id="sound-option"[^>]*>/)?.[0] ?? "";
+    assert.match(soundOption, /type="checkbox"/);
+    assert.match(soundOption, /\bdisabled/);
+    assert.doesNotMatch(soundOption, /\bchecked/);
+    assert.match(html, /id="sound-test"[^>]*disabled/);
     for (const limitation of page.limits) assert.ok(html.includes(limitation), `missing limitation: ${limitation}`);
 
     const links = extractLinks(html);

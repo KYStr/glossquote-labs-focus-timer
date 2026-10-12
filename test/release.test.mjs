@@ -130,7 +130,10 @@ test("preview and production builds keep source metadata separate and emit exact
     assert.equal(preview.fileCount, 6);
     const previewHtml = await readFile(resolve(preview.outputPath, "index.html"), "utf8");
     assert.match(previewHtml, /noindex, nofollow/);
-    assert.doesNotMatch(previewHtml, /rel="canonical"|focus\.glossquote\.com/);
+    assert.doesNotMatch(previewHtml, /rel="canonical"|hreflang="x-default"|focus\.glossquote\.com/);
+    const englishPreview = await readFile(resolve(preview.outputPath, "en/index.html"), "utf8");
+    assert.match(englishPreview, /noindex, nofollow/);
+    assert.doesNotMatch(englishPreview, /rel="canonical"|hreflang="x-default"|focus\.glossquote\.com/);
     await assert.rejects(readFile(resolve(preview.outputPath, "robots.txt")), { code: "ENOENT" });
     await assert.rejects(readFile(resolve(preview.outputPath, "_headers")), { code: "ENOENT" });
 
@@ -142,9 +145,12 @@ test("preview and production builds keep source metadata separate and emit exact
       assert.match(html, new RegExp(`<link rel="canonical" href="${SITE}${page.replaceAll("/", "\\/")}">`));
       assert.match(html, new RegExp(`<link rel="alternate" hreflang="zh-Hant" href="${SITE}index.html">`));
       assert.match(html, new RegExp(`<link rel="alternate" hreflang="en" href="${SITE}en/index.html">`));
+      assert.equal([...html.matchAll(/hreflang="x-default"/g)].length, 1);
+      assert.ok(html.includes(`<link rel="alternate" hreflang="x-default" href="${SITE}index.html">`));
       assert.match(html, /<meta name="robots" content="index, follow">/);
       assert.doesNotMatch(html, /noindex|href="\.\.?\/.*index\.html"/);
       assertProductionHtml(html, page, releasePolicy(SITE));
+      assert.throws(() => assertProductionHtml(html.replace(/<link rel="alternate" hreflang="x-default"[^>]*>/, ""), page, releasePolicy(SITE)));
       assert.match(await readFile(resolve(projectPath, "public", page), "utf8"), /noindex, nofollow/);
     }
     assert.equal(await readFile(resolve(production.outputPath, "robots.txt"), "utf8"),
